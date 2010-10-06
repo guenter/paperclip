@@ -58,11 +58,13 @@ module Paperclip
     #   separate parts of your file name.
     module S3
       def self.extended base
-        begin
-          require 'aws/s3'
-        rescue LoadError => e
-          e.message << " (You may need to install the aws-s3 gem)"
-          raise e
+        unless defined?(AWS::S3)
+          begin
+            require 'aws/s3'
+          rescue LoadError => e
+            e.message << " (You may need to install the aws-s3 gem)"
+            raise e
+          end
         end
 
         base.instance_eval do
